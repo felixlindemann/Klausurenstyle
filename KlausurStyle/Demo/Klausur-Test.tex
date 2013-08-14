@@ -1,0 +1,143 @@
+\NeedsTeXFormat{LaTeX2e}
+\documentclass{scrartcl}
+ 
+\usepackage[
+		%UseSVN, 			%Soll SVN als Versionsverwaltung genutzt werden?
+		%answers, 			%LösungFürStudenten
+		MusterLoesung,		%Musterlösung
+		isGruppenarbeit,	%Gruppenarbeit
+		GiveLines,			%Raum für Antworten
+		GivePoints,			%Kästen zur Benotung
+		Inhaltsverzeichnis 	%Inhaltsverzeichnis
+	]
+	{../Klausur}
+% Setup-Paramter	  
+
+\pgfdeclareimage[height=1.5cm]{logo}{grafik/logo.png} 
+\setUniversity{Name of University}
+\setKlausurVersionDatum{\today~\thistime~Uhr}
+\setKlausurTyp{Tutorium}
+\setKlausurName{\KlausurTyp~No.5 - Travelling Salesman Problem}
+\setKlausurFach{Transportwirtschaft Sommersemester 2011}
+\setKlausurDatum{16. Mai 2011 09:30 Uhr}
+\setKlausurProfessorA{\small\textbf{Prof. Dr. Max Mustermann} \\\footnotesize max.mustermann@hs-neu-ulm.de}
+\setKlausurProfessorB{\small\textbf{Dipl. Kfm. Felix Lindemann} \\\footnotesize felix.lindemann@hs-neu-ulm.de}
+\setKlausurProfessorC{\small\textbf{Dipl. Kfm. Dagmar Hase} \\\footnotesize dagmar.hase@hs-neu-ulm.de}
+%
+\bibliography{bib/literature}
+
+\addtocategory{primary}{  Domschke.1997,Domschke.2005,Durr.1992.750,Kathofer.2008.740}    
+\addtocategory{secondary}{   Feige.2008,LutzWestphal.2007.751,Neumann.2004}    
+ 
+\begin{document} 
+	\sffamily\onehalfspacing
+	%Falls kein Subversion verwendet wird, kann diese Zeile ggf. manuelle angepasst werden. 
+	\TitleTutoriumA  
+\Aufgabe %1
+{Theoretische Fragen - Problemmodell I}
+{
+	Tipp: Zur Bearbeitung der folgenden Aufgaben ist ein 
+	Blick in die empfohlene Literatur sowie die 
+	Vorlesungsunterlagen notwendig!
+} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\TeilAufgabe
+{Beschreiben Sie das Travelling Salesman Problem in eigenen Worten.}
+{4}
+\KlausurAntwortKasten{4cm}
+\KlausurErgebnis{Siehe Vorlesungsunterlagen - Tutorium}
+\KlausurMusterLoesung{
+	Finde die kostenminimale Rundreise(1), 
+	die am gleichen Punkt startet(1) und endet(1) und 
+	jeden Ort nur einmal besucht.(1)
+} 
+\KlausurKorrekturhinweis{4p.} 
+\KlausurErlaeuterung{-}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\TeilAufgabe
+{Geben Sie das formale Problem Modell für das Traveling Salesman Problem (TSP) an.}
+{10}
+\KlausurAntwortKasten{8cm}
+\KlausurErgebnis{Siehe Vorlesungsunterlagen - Tutorium}
+\KlausurMusterLoesung{
+	\begin{align}
+	\min f(x) &= \sum\limits_{i=1}^n\sum\limits_{j=1}^n c_{ij} \cdot x_{ij} 
+		& \label{eq.TSP.Zielfunktion}\\
+	s.t. & \nonumber\\
+	\sum\limits_i x_{ij} &= 1 & \forall ~j= 1 \ldots n
+		\label{eq.TSP.cond1}\\
+	\sum\limits_j  x_{ij} &= 1 & \forall ~i= 1 \ldots n
+		\label{eq.TSP.cond2}\\
+	x_{ij} &\in \left\{0,1\right\} & \forall ~i,j= 1 \ldots n
+		\label{eq.TSP.cond3}\\
+	\sum\limits_{i\in Q}\sum\limits_{j\in Q} x_{ij} &\leq |Q| -1 & 
+		\forall Q\text{~}\subset \text{~}V \text{ with } 2\leq |Q| 
+		\leq \left\lfloor \frac{n}{2}\right\rfloor
+			\label{eq.TSP.cond4}
+\end{align}
+} 
+\KlausurKorrekturhinweis{je korrekter Zeile 2p max. 10p} 
+\KlausurErlaeuterung{-}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\newpage
+	 
+\Aufgabe %2
+	{Anwendung des TSP-Problem Modells}
+	{
+		\minisec{Bearbeitungshinweise zur Anwendung des TSP Problem-Modells}
+			Prüfen Sie für die gegebenen Graphen anhand der \textbf{formalen} 
+			Bedingungen des TSP-Problem-Modells, ob die eingezeichnete 
+			Lösung gültig ist.\\
+			Es genügt eine nicht erfüllte Bedingung, um zu zeigen, 
+			dass die Lösung ungültig ist; um zu zeigen, dass eine Lösung 
+			gültig ist, müssen \emph{alle} Bedingungen erfüllt sein.
+	} 
+%				 
+\TeilAufgabe{
+	\label{aufg.2.a}
+	Ist die Lösung aus Abbildung \ref{fig.Graph.TSP.2.a} gültig?
+	\begin{figure}[H]
+		\centering
+		% \svnInfo $Id: Klausur.sty 2 2011-05-18 08:35:27Z felixlindemann $
+		\begin{tikzpicture}[ shorten >=1pt, node distance=2.5cm,semithick,scale=0.75 ]
+			\tikzstyle{every state}=[fill=white,draw,circle,inner sep=1pt]
+			\node[state](A)                    			{$1$};
+			\node[state]         (B) [below left of=A] 			{$2$};
+			\node[state]         (C) [left of=B] 			{$3$};
+			\node[state]         (D) [above left of=C] 						{$4$};
+			\node[state]         (E) [above of=D] 			{$5$};	
+			\node[state]         (F) [left of=E] 			{$6$};	
+			\node[state]         (G) [right of=E] 			{$7$};	
+			\tikzstyle{tikzNodeLength}=[fill=white,draw,circle,inner sep=1pt,font=\sf \tiny]								
+			\begin{scope}[>=latex,thick]
+				\path[->] (A) edge	(B);
+				\path[->] (B) edge	(C);											 
+				\path[->] (E) edge	(D);
+				\path[->] (D) edge  	(C);
+			%		\path[->] (C) edge  	(E);
+				\path[->] (E) edge	(G);
+				\path[->] (G) edge	(A);
+			\end{scope}
+		\end{tikzpicture} 
+		\caption{Graph zu Aufgabe \ref{aufg.2.a}}
+		\label{fig.Graph.TSP.2.a}
+	\end{figure}
+}
+{2} % 2 Punkte
+\KlausurAntwortKasten{10cm}
+\KlausurErgebnis{Siehe Vorlesungsunterlagen - Tutorium}
+\KlausurMusterLoesung{$\sum\limits_{i}x_{ij} =0 $ für $j =6$ (1p) $\rightarrow$ ungültig (1p)} 
+\KlausurKorrekturhinweis{2p.} 
+\KlausurErlaeuterung{-}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\KlausurFinalize 
+\end{document}

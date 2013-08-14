@@ -1,0 +1,814 @@
+% \svnInfo $Id: Klausur.sty 2 2011-05-18 08:35:27Z felixlindemann $
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{Klausur}[21/06/2010 Klausur von Felix Lindemann]
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    Hinweis: Alle Intern verwendeten Variablen und Commands starten mit einem '@'			  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%
+%%%%%%%%%%%%%%%%%%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%	Options Area
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%Hier können Optionen deklariert werden
+%
+\newif\if@answers					\@answersfalse				\DeclareOption{answers}				 {\@answerstrue}%
+\newif\if@MusterLoesung		\@MusterLoesungfalse	\DeclareOption{MusterLoesung}	 {\@MusterLoesungtrue}%
+\newif\if@isGruppenarbeit	\@isGruppenarbeitfalse\DeclareOption{isGruppenarbeit}{\@isGruppenarbeittrue}%
+\newif\if@GiveLines				\@GiveLinesfalse			\DeclareOption{GiveLines} 		 {\@GiveLinestrue}%
+\newif\if@GivePoints			\@GivePointsfalse			\DeclareOption{GivePoints} 		 {\@GivePointstrue}%
+
+\newif\if@UseSVN			\@UseSVNfalse			\DeclareOption{UseSVN} 		 {\@GUseSVNstrue}%
+%\newif\if@RaiseRevision			\@RaiseRevisionfalse			\DeclareOption{RaiseRevision} 		 {\@RaiseRevisiontrue}%
+\newif\if@Inhaltsverzeichnis	\@Inhaltsverzeichnisfalse	\DeclareOption{Inhaltsverzeichnis}{\@Inhaltsverzeichnistrue}
+
+%Alle uebrigen Optionen koennen nicht verarbeitet werden
+\DeclareOption*{\typeout{Die Option '\CurrentOption' ist für dieses Paket nicht definiert.}}%
+\ProcessOptions\relax
+%
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Benötigte Packages Laden
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\RequirePackage[ngerman]{babel}
+\RequirePackage[left=1.5cm,right=1.5cm,top=0.5cm,bottom=1cm,includeheadfoot]{geometry} %4 
+\RequirePackage[latin1]{inputenc}
+\RequirePackage{ifthen} 	%if-Then Blöcke
+\RequirePackage{tikz}     	% TIKZ = PGF Reloaded
+\RequirePackage{blindtext}	% Blindtext
+\RequirePackage{enumitem}	% Custom List
+\RequirePackage{xargs}	
+\RequirePackage{calc}		% Rechnen
+\RequirePackage{times}  	% Eine Aktion n mal wiederholen
+\RequirePackage{multicol} 	% Mehrspaltige Tabellen
+\RequirePackage{multirow}	% Mehrzeilige Tabellen
+\RequirePackage{refcount}	% referenzierungen
+\RequirePackage{forloop}   %For loop until schleifen
+\RequirePackage{scrtime} % zeitstempel
+\RequirePackage{eurosym}  % Eurosymbol
+\RequirePackage{slashbox} % Geteilte Zellen in Tabelle x/y
+\RequirePackage{typearea} 
+\RequirePackage{chngpage}
+\RequirePackage{here} %Positionieren von Grafiken
+\RequirePackage{setspace} %um singlespacing und doublespacing 
+\RequirePackage{amsmath,amssymb,bbm} %Für Zahlenräume in Buchstab
+\RequirePackage{cancel} 	% Kürzen in Brüchen
+\RequirePackage{subfig}		%Teilabbildungen
+\RequirePackage{scrpage2} 
+\if@UseSVN\RequirePackage[nofancy]{svninfo}\fi %SvnVersion nur auf Bedarf einbinden
+\RequirePackage{xstring}  % Für die Erstetzung im Deckblatt der Revision
+\RequirePackage{lmodern} 				%	Type1-Schriftart für nicht-englische Texte 
+\RequirePackage{textcomp} 				% Text-Companion-Symbols (z. B. \texteuro) 
+\RequirePackage[ngerman]{translator} 
+\RequirePackage{pdfpages}				% zum Einbinden von PDF-Dateien
+%
+% Setup tikz
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{shapes,decorations,calendar,matrix,backgrounds,folding}
+\usetikzlibrary{decorations.shapes}
+\usetikzlibrary{decorations.footprints}
+\usetikzlibrary{petri}
+\usetikzlibrary{calc}
+\usetikzlibrary{fit}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+%%%%%%%%%%%%%%%%%%% 	lokale Variablen   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+\newcommand{\LogoPath}{}
+\newcommand{\University}{}
+\newcommand{\KlausurTyp}{Typ der Klausur}
+\newcommand{\KlausurName}{Name der Klausur}
+\newcommand{\KlausurFach}{Transportwirtschaft}
+\newcommand{\KlausurProfessorA}{}
+\newcommand{\KlausurProfessorB}{}
+\newcommand{\KlausurProfessorC}{}
+\newcommand{\KlausurDatum}{\today}
+\newcommand{\KlausurVersionDatum}{\today} 
+\newcommand{\setKlausurVersionDatum}[1]{\renewcommand{\KlausurVersionDatum}{#1}}
+\newcommand{\resetKlausurVersion}[1]{\setcounter{KlausurRevision}{#1}}
+\newcommand{\setKlausurVersion}{\setcounterref{KlausurRevision}{mylastpage}}
+\newcommand{\setLogoPath}[1]{\renewcommand{\LogoPath}{#1}}
+\newcommand{\setUniversity}[1]{\renewcommand{\University}{#1}}
+\newcommand{\setKlausurTyp}[1]{\renewcommand{\KlausurTyp}{#1}}
+\newcommand{\setKlausurName}[1]{\renewcommand{\KlausurName}{#1}}
+\newcommand{\setKlausurFach}[1]{\renewcommand{\KlausurFach}{#1}}
+\newcommand{\setKlausurDatum}[1]{\renewcommand{\KlausurDatum}{#1}}
+\newcommand{\setKlausurProfessorA}[1]{\renewcommand{\KlausurProfessorA}{#1}}
+\newcommand{\setKlausurProfessorB}[1]{\renewcommand{\KlausurProfessorB}{#1}}
+\newcommand{\setKlausurProfessorC}[1]{\renewcommand{\KlausurProfessorC}{#1}}
+
+
+%Hnu Farben
+%blautöne
+	\definecolor{HNUBlue}{RGB}{60, 101, 161}
+	\definecolor{HNUPremiumBlue}{RGB}{24, 43, 69}
+	\definecolor{HNUNachtBlau}{RGB}{21, 39, 99}
+	\definecolor{HNUFahne}{RGB}{63, 154, 201}
+
+%grüntöne
+	\definecolor{HNUHellGruen}{RGB}{238, 238, 122}
+	\definecolor{HNUMittelGruen}{RGB}{224, 226, 45}
+	\definecolor{HNUDunkelGruen}{RGB}{175, 193, 36}
+
+%pink
+	\definecolor{HNUViolett}{RGB}{121, 62, 128}
+	\definecolor{HNUMagenta}{RGB}{212, 48, 114}
+
+%Weiss
+	\definecolor{HNUWeiss}{RGB}{255, 255, 255}
+	\definecolor{HNUKWeiss}{RGB}{254, 254, 254}
+	\definecolor{HNUSchwarz}{RGB}{0, 0, 0}
+
+%Grau
+	\definecolor{HNUGrau10}{RGB}{223, 224, 226}
+	\definecolor{HNUGrau25}{RGB}{192, 192, 192}
+	\definecolor{HNUGrau50}{RGB}{150, 150, 150}
+	\definecolor{HNUGrau75}{RGB}{51, 51, 51}
+ 
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+%%%%%%%%%%%%%%%%%%% 	Literaturverzeichnis %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	
+\RequirePackage{etoolbox}         %Sammlung von Macros für ZitierStil Benötigt.
+\RequirePackage[babel,german=guillemets]{csquotes} 	%Wird für Biblatex benötigt	
+\usepackage[style=authoryear,
+            bibstyle=authoryear,
+            citestyle=authoryear, backend=bibtex8]{biblatex}
+%Festlegen der Sprachoptionen für den Ziztierstil			 
+	\DeclareLanguageMapping{ngerman}{ngerman-apa}		
+% Definieren der Bib-Categorien
+	\DeclareBibliographyCategory{primary}
+	\DeclareBibliographyCategory{secondary}
+% Benennung der BibCategorien
+	\defbibheading{primary}{\section*{Empfohlene Literatur}}
+	\defbibheading{secondary}{\section*{Weiterführende Literatur}}
+% Additional field
+\DeclareFieldFormat{note}{\sffamily\textbf{#1}\normalfont}
+%\DeclareFieldFormat{note}{\sffamily\newline \textbf{Hinweis}:~{#1}\normalfont\newline}
+
+\newdimen{\KlasurBlockWidth} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%% Definieren der benötigten Zähler %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+\newcounter{KlausurRevision}
+\newcounter{@KlausurAufgabe}
+\newcounter{@KlausurTeilAufgabe}
+%
+\newcounter{@KlausurPunkteGesamt}
+\newcounter{@KlausurPunkteAufgabe}
+\newcounter{@KlausurPunkteTeilaufgabe}
+%
+\newcounter{@KlausurTempA}
+\newcounter{@KlausurTempB}
+\newcounter{@KlausurTempC}
+\newcounter{@KlausurTempD}
+%
+% Damit die Punkte referenziert werden können, muss der Wert mit RefStepcounter gesetzt werden.
+% Daher wird vom regulären Wert erst 1 abgezogen und dann per RefStepCounter dazu addiert. 
+% --> Fazit. Wert bleibt gleich, wurde aber referenzierbar.
+\newcommand{\@refstepcounter}[1]{
+	\addtocounter{#1}{-1}\refstepcounter{#1}
+}
+
+\newcommand{\@KlausurNeueAufgabe}{
+	% Speichern der Punkte der vorherigen Aufgabe
+	\@refstepcounter{@KlausurPunkteAufgabe}
+		\label{@KlausurPunkteAufgabe.\the@KlausurAufgabe}  
+	%				
+	% Speichern der AnzahlTeilaufgaben 	der vorherigen Aufgabe
+	\@refstepcounter{@KlausurTeilAufgabe}
+		\label{@KlausurTeilAufgaben.\the@KlausurAufgabe} 	
+	%					
+	% Speichern der Nummer der NEUEN Aufgabe
+	\refstepcounter{@KlausurAufgabe}
+		\label{KlausurAufgabe.\the@KlausurAufgabe}					
+	\setcounter{@KlausurTeilAufgabe}{0}
+	\setcounter{@KlausurPunkteAufgabe}{0}
+	\setcounter{@KlausurPunkteTeilaufgabe}{0} 
+}
+
+\newcommand{\@KlausurNeueTeilAufgabe}[2]{
+	\refstepcounter{@KlausurTeilAufgabe}
+	\ifthenelse{\equal{#2}{0}}{
+		\addtocounter{@KlausurPunkteGesamt}{#1}
+		\addtocounter{@KlausurPunkteAufgabe}{#1}
+	}{}
+	\setcounter{@KlausurPunkteTeilaufgabe}{#1}  
+	\@refstepcounter{@KlausurPunkteTeilaufgabe}
+	 % Speichern der Punkte der Teilaufgabe
+		\label{@KlausurPunkteAufgabe.\the@KlausurAufgabe.\the@KlausurTeilAufgabe}  
+}
+ 
+%#1 Aufgabentitel bspw. theoretische Fragen
+%#2 HintergrundInformationen
+%#3 Aufgabenstellung
+%#4 Punkte für diese Aufgabe 
+%#5 Bonusaufgabe
+\newcommandx{\Aufgabe}[5][3=0,4=0,5=0]
+{ 
+	\normalsize
+	\@KlausurNeueAufgabe
+	%%	 	
+	%%
+	\minisec{Aufgabe~\the@KlausurAufgabe ~ #1 
+		(\ref{@KlausurPunkteAufgabe.\the@KlausurAufgabe} Punkte)
+	}
+	\addcontentsline{toc}{section}{Aufgabe~\the@KlausurAufgabe ~ #1 
+		(\ref{@KlausurPunkteAufgabe.\the@KlausurAufgabe} P.)
+	} 
+	\if@GivePoints
+		\vspace{-0.5cm}
+		\setlength{\fboxrule}{0.3mm}
+		\@points{\ref{@KlausurPunkteAufgabe.\the@KlausurAufgabe}}
+		\vspace{0.5cm}
+	\fi
+	#2 
+	\ifthenelse{\equal{#5}{1}}{~(Bonusaufgabe!)}{}\\[1em]
+	\ifthenelse{\equal{#3}{0}}{}{#3\\[1em]}
+	\ifthenelse{\equal{#4}{0}}{}{
+		\addtocounter{@KlausurPunkteGesamt}{#4}
+		\addtocounter{@KlausurPunkteAufgabe}{#4}
+	}
+}
+
+%#1 Aufgabenstellung
+%#2 Punkte für diese Aufgabe
+%#3 isBonusaufgabe
+\newcommandx{\TeilAufgabe}[3][3=0]{   
+	\normalsize	
+	\@KlausurNeueTeilAufgabe{#2}{#3}
+	\vspace*{-1em}
+	\addtocounter{@KlausurTeilAufgabe}{-1}
+	\begin{enumerate}[label=\the@KlausurAufgabe.\alph*)] 
+		\setcounter{enumi}{\the@KlausurTeilAufgabe} 
+		\item ~      
+		\if@GivePoints
+			\vspace{0.5cm}
+			\setlength{\fboxrule}{0.3mm}
+			\@points{#2}\vspace{-0.5cm}
+		\fi
+		%  
+		#1
+		\ifthenelse{\equal{#3}{1}}{~(Bonusaufgabe!)}{}   
+	\end{enumerate}   
+	\addtocounter{@KlausurTeilAufgabe}{1}
+}
+% 
+\newcommand{\KlausurMusterLoesung}[1]{
+	\setlength{\fboxrule}{0.1mm}			
+			\if@answers 
+			\else
+				\if@MusterLoesung   
+				   	{
+				   		\color{blue}
+				   		\small
+				   		\fbox{
+				   			\begin{minipage}[t]{\textwidth}
+				   				\textbf{Musterlösung:}
+				   				~#1
+				   			\end{minipage}
+				   		}
+				   	} 
+				\fi
+			\fi
+     \setlength{\fboxrule}{1pt} 
+ }  
+ 
+\newcommand{\KlausurErgebnis}[1]{
+	\setlength{\fboxrule}{0.1mm}			
+	\if@answers 
+		{
+			\color{black}
+			\small
+			\fbox{
+				\begin{minipage}[t]{\textwidth}
+					\textbf{Ergebnis:}
+					~#1
+				\end{minipage}
+			}
+		}  
+		\tiny				
+	\fi
+	\setlength{\fboxrule}{1pt} 
+}  
+      
+\newcommand{\KlausurKorrekturhinweis}[1]{
+	\setlength{\fboxrule}{0.1mm}			
+	\if@answers 
+		\else
+		\if@MusterLoesung    
+			{
+				\color{red} 	
+				\small
+				\fbox{
+					\begin{minipage}[t]{\textwidth}
+						\raggedleft\textbf{Korrekturhinweis:}
+						~\textsc{#1}
+					\end{minipage}
+				}
+			}  
+		\fi
+	\fi
+	\setlength{\fboxrule}{1pt} 
+}
+        
+\newcommand{\KlausurErlaeuterung}[1]{
+	\setlength{\fboxrule}{0.1mm}			
+	\if@answers 
+	\else
+		\if@MusterLoesung   
+			\ifthenelse{
+				\equal{#1}{-}
+			}
+			{}
+			{
+				{
+					\color{green}
+					\small
+					\fbox{
+						\begin{minipage}[t]{\textwidth}
+							\textbf{Erläuterung zur Musterlösung:}
+							~#1
+						\end{minipage}
+					}
+				}
+			}
+
+		\fi
+	\fi
+	\setlength{\fboxrule}{1pt} 
+}  
+  
+\newcommand{\ifisAufgabenstellung}[1]{
+	\if@answers  
+	\else
+		\if@MusterLoesung    
+		\else
+			#1   	
+		\fi
+	\fi
+}       
+\newcommand{\ifisErgebnis}[1]{
+	\if@answers #1\fi
+}   
+
+\newcommand{\ifisMusterLoesung}[1]{
+	\if@MusterLoesung #1\fi
+} 
+
+\newcommand{\KlausurGetType}
+{
+	\vspace{0.6cm}
+	\if@answers
+		\fbox{\textbf{Ergebnisse für Studenten}}
+	\else
+		\if@MusterLoesung  
+			\fbox{\textbf{Musterlösung}}
+		\fi
+	\fi
+	\vspace{-0.6cm}
+}
+
+\newcommand{\@KlausurGetPunkte}[1]
+{
+ 	\ifcase #1 
+ 			(0~Punkte)
+	\or 
+	    (1~Punkt)
+	\else 
+	    (#1~Punkte)
+	\fi  
+}
+%  
+\newcommand{\KlausurPunkte}[1]{	
+	\noindent\sffamily\minisec{Punkte:}  \vspace{-0.5cm} 
+
+	\begin{multicols}{#1}
+		\setcounterref{@KlausurTempA}{@KlausurAufgaben} %Usepackage refcount 	  
+		\setlength{\KlasurBlockWidth}{.9\textwidth}
+		\divide\KlasurBlockWidth by #1
+		\begin{flushright}
+			\forLoop{1}{\the@KlausurTempA}{@KlausurTempB}
+			{
+				\begin{minipage}[t]{3.5cm}%\begin{minipage}[t]{\KlasurBlockWidth}
+					\tiny
+					\setcounterref{@KlausurTempC}{@KlausurTeilAufgaben.\the@KlausurTempB} %Usepackage refcount
+					\textbf{
+						Aufg.~\arabic{@KlausurTempB}
+					} 
+					(max. ~\ref{@KlausurPunkteAufgabe.\the@KlausurTempB}~Pkt.) 
+					~\vspace{-4.5ex}
+					\begin{flushright}
+						\framebox[0.75cm][t]{\rule{0cm}{2.5ex}}
+					\end{flushright}
+					~\vspace{-1ex}
+					~\\ 						
+					\forLoop{1}{\the@KlausurTempC}{@KlausurTempD}
+					{
+						\tiny
+						\hspace*{1cm}
+						\alph{@KlausurTempD})
+						(max. ~\ref{@KlausurPunkteAufgabe.\the@KlausurTempB.\the@KlausurTempD}~Pkt.)
+						~\vspace{-5ex}
+						\begin{flushright}
+							\framebox[.5cm][t]{
+								\rule{0cm}{1.5ex}
+							}
+						\end{flushright} 
+						~\vspace{-1ex}
+						~\\
+					}
+				\end{minipage}
+				~\\				
+			}
+		\end{flushright} 
+	\end{multicols}   		
+	~\vspace{-2.5cm}
+	\begin{flushright}
+		\begin{tabular}{rc} 
+			\textbf{\scriptsize Gesamt: (max.~\ref{@KlausurPunkteGesamt}~Pkt.) }   
+			& \raisebox{-0.4cm}[0.8cm]{\framebox[2cm][t]{\rule{0cm}{0.8cm}}} \\% \\
+			\textbf{\small Note: } 
+			& \raisebox{-0.4cm}[1cm]{\framebox[2cm][c]{\rule{0cm}{1cm} \huge ,}}% 
+		\end{tabular}
+	\end{flushright}
+}
+
+%Erstellt einen Antwortkasten
+\newcommandx{\KlausurAntwortKasten}[2][2=~]
+{ 
+	\if@answers 
+	\else
+		\if@MusterLoesung   
+		\else
+			\noindent%
+			~\\
+			\fbox{
+				\begin{minipage}{\textwidth}
+					#2\rule{0mm}{#1}
+				\end{minipage}
+			}	   		
+		\fi
+	\fi
+}
+%Gibt einen Kasten für erreichte Punkte zurück
+\newcommand{\@points}[1]{%
+	\if@answers 
+	\else
+		\if@MusterLoesung   
+		\else
+			\marginpar{\framebox[15mm]{\rule{0mm}{10mm}~\\[1em]}
+			\mbox{\tiny max.~ #1 p}}
+		\fi
+	\fi 
+}
+
+\newcommand{\ChangePage}{
+	%
+	\relax
+	\changetext{}{-1cm}{0cm}{0cm}{}
+	\setheadwidth[-.5cm]{19.5cm}
+	\setfootwidth[-.5cm]{19.5cm}	 
+	\rohead{ 
+		\if@isGruppenarbeit
+			 Gruppe: $\underline{\hspace{4cm}}$
+		\else 
+		{  
+			Vorname: $\underline{\hspace{4cm}}$\\[1em]
+			   Name: $\underline{\hspace{4cm}}$
+		}
+		\fi
+	}
+ }
+ 		
+\newcommand{\KlausurGetGruppenHeader}{
+	\if@isGruppenarbeit
+		% 					\multirow{Zeilen}{Breite}{Inhalt}
+		\multirow{1}{*}{ \textbf{Gruppe} } & \multicolumn{2}{|c|}{}\\[1em]\hline
+	\fi 
+ }
+ 	
+\newcommand{\tocsection}[1]{
+	\addtocontents{toc}{\vspace{\cftbeforesecskip}}
+	\addtocontents{toc}{\hspace{\cftsecindent}\cftsecfont{#1}\\}
+}
+ 
+%erstellt eine Anzahl von Linien
+\newcommand{\KlausurAntwortLinien}[1]
+{ 
+	\if@answers 
+	\else
+		\if@MusterLoesung   
+	   	\else
+			\noindent% 
+			\setcounter{@KlausurTempA}{0}
+			\loop\ifnum\value{@KlausurTempA}<#1%
+				\ifnum\value{@KlausurTempA}<1
+					~\hrulefill\\[0.5em]
+				\else  	
+					\rule{\textwidth}{0.4pt}\\[0.5em]
+				\fi
+				\addtocounter{@KlausurTempA}{1}%
+			\repeat%	   		
+		\fi
+	\fi 
+}
+%1 Anzahl Spalten für Kästen
+\newcommand{\KlausurPunkteA}[1]{
+	\setcounter{@KlausurTempA}{0}
+	\setcounter{@KlausurTempB}{0}
+	\setcounterref{@KlausurTempA}{@KlausurAufgaben} %Usepackage refcount  
+	\begin{multicols}{#1}[\minisec{Punkte:}] %\vspace*{-1cm}
+		\begin{flushright}
+			\loop\ifnum\the@KlausurTempB<\the@KlausurTempA
+				\addtocounter{@KlausurTempB}{1}%Klausuren fangen bei 0 an zu zählen, damit <= Bedingung hinhaut
+				\textbf{\tiny Aufg.~\arabic{@KlausurTempB} ~\ref{@KlausurPunkteAufgabe.\the@KlausurTempB}~Pkt.} 
+				\framebox[1cm][t]{\rule{0cm}{2ex}} \\
+				\@KlausurGetSubPoints 
+			\repeat%
+		\end{flushright}
+	\end{multicols}   
+	\begin{flushright}
+		\textbf{\tiny Gesamt: max.~\ref{@KlausurPunkteGesamt}~Pkt. } 
+		\framebox[2cm][t]{\rule{0cm}{3ex}} % 
+	\end{flushright}
+		\setlength{\fboxrule}{1pt}%
+	\begin{flushright}
+		\textbf{\tiny Note: } 
+		\framebox[2cm][c]{\rule{0cm}{4ex} \huge ,} % 
+	\end{flushright}
+	\setlength{\fboxrule}{0.5pt}%
+} 
+
+\newcommand{\@KlausurGetSubPoints}
+{
+	\setcounter{@KlausurTempC}{0}
+	\setcounter{@KlausurTempD}{0}
+	\setcounterref{@KlausurTempC}{@KlausurTeilAufgaben.\the@KlausurTempB} %Usepackage refcount
+	\typeout{@KlausurTeilAufgaben.KlausurTempB: = '@KlausurTeilAufgaben.\the@KlausurTempB' = \the@KlausurTempC }
+	\loop\ifnum\the@KlausurTempD<\the@KlausurTempC
+		\addtocounter{@KlausurTempD}{1}%    
+		\tiny Aufg.~
+		\arabic{@KlausurTempB}.\alph{@KlausurTempD} ~
+		\ref{@KlausurPunkteAufgabe.\the@KlausurTempB.\the@KlausurTempD}~Pkt.\\
+	\repeat%
+}
+
+
+
+\AtBeginDocument{
+	\setKlausurVersion
+	\setcounter{@KlausurAufgabe}{0}
+	\setcounter{@KlausurTeilAufgabe}{0}
+	%
+	\setcounter{@KlausurPunkteGesamt}{0}\setcounter{@KlausurPunkteAufgabe}{0}\setcounter{@KlausurPunkteTeilaufgabe}{0}
+	%
+	\setcounter{@KlausurTempA}{0}
+	\setcounter{@KlausurTempB}{0}
+	\setcounter{@KlausurTempC}{0}
+	\setcounter{@KlausurTempD}{0} 
+} 
+\AtEndDocument{ 
+  \@refstepcounter{@KlausurPunkteGesamt}\label{@KlausurPunkteGesamt}%	%Punkte insgesamt speichern
+  \@refstepcounter{@KlausurAufgabe}\label{@KlausurAufgaben}%			%Anzahl Aufgaben speichern
+  \@KlausurNeueAufgabe%													%Punkte der letzten Aufgabe speichern
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setlength{\parskip}{\baselineskip}  \setlength{\parindent}{0pt} % Absatz ohne Einzug ,
+\setlength{\itemsep}{0.3\itemsep}
+\setlength{\topsep}{0.3\topsep}
+\setlength{\headheight}{2\headheight}
+\setkomafont{caption}{\sffamily\itshape\small\mdseries}
+\setkomafont{captionlabel}{\sffamily\bfseries\upshape}
+%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% Kopf-Und Fußzeilen %%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
+\pagestyle{scrheadings}
+\setheadsepline{0.6pt}
+\setfootsepline{0.6pt}
+\clearscrheadfoot
+\lehead{lehead}
+\rehead{rehead}
+\chead{}
+\setkomafont{pageheadfoot}{\normalfont\scriptsize\sffamily}
+\lohead{\KlausurName\\\KlausurFach}
+\rohead{}
+%
+\lofoot{\if@UseSVN\tiny\svnInfoFile~(Rev. \#\svnInfoRevision~-~\svnInfoLongDate~\StrSubstitute{\svnInfoTime}{Z}{~Uhr})\fi} 
+\rofoot{Seite~\thepage/\pageref{mylastpage}}
+\cfoot{\KlausurGetType}
+%% Erspart ein paar Fehlermeldungen.
+\sloppy%
+\hfuzz2pt%
+\vfuzz2pt%
+% hat was mit Abstaenden zu tun
+\frenchspacing
+\AtBeginDocument{
+					% Hurenkinder und Schusterjungen vermeiden!
+					% (Verweiste einzelne Worte auf einer Seite) 
+					\clubpenalty = 10000
+					\widowpenalty = 10000
+					\displaywidowpenalty = 10000
+					\interfootnotelinepenalty=10000 %Verhindert Seitenumbruch in Fußnoten
+				} 
+\makeatletter
+\renewcommand*\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
+\renewcommand*\l@subsection{\@dottedtocline{2}{3.8em}{3.2em}}
+\renewcommand*\l@subsubsection{\@dottedtocline{3}{7.0em}{4.1em}}
+\renewcommand*\l@paragraph{\@dottedtocline{4}{10em}{5em}}
+\renewcommand*\l@subparagraph{\@dottedtocline{5}{12em}{6em}}
+\renewcommand*\l@figure{\@dottedtocline{1}{1.5em}{2.3em}}
+\makeatother
+
+
+% }
+
+\newcommandx{\TitleTutoriumA}[1][1=HNUDunkelGruen]
+{
+ 
+	\singlespacing  
+	\LARGE
+	\textbf{\KlausurFach} \\[0.5cm]
+	\Large\KlausurName\\[0.5cm]
+	\normalsize 
+	\begin{tikzpicture}[remember picture,overlay] 
+		\node[xshift=.98\textwidth,yshift=-0.93cm] at (current page.north west) {
+		\pgfuseimage{logo}} ;
+	\end{tikzpicture}
+	\if@UseSVN\putSVNinfoTable\fi
+	\begin{tikzpicture}
+		\filldraw[fill=#1,draw=#1] (0,0) rectangle ( 0.99\textwidth,2cm);
+		\ifthenelse{\boolean{@answers}}
+		{
+			\draw  
+			(0.5\textwidth,1cm) node[fill=#1] {\Large\KlausurGetType};
+		}{  
+			\ifthenelse{\boolean{@MusterLoesung}}
+		{
+			\draw  
+			(0.5\textwidth,1cm) node[fill=#1] {\Large\KlausurGetType};
+		}{ }}
+	\end{tikzpicture}
+	\vspace*{-0.75cm} 
+	\begin{table}[H]
+		\begin{tabular}{p{0.3\textwidth}p{0.32\textwidth}p{0.3\textwidth}}
+			\begin{flushleft} 
+				\KlausurProfessorA
+			\end{flushleft}
+			& 
+			\begin{center}
+				\KlausurProfessorB
+			\end{center}
+			& 
+			\begin{flushright}
+				\KlausurProfessorC
+			\end{flushright}
+		\end{tabular} 
+	\end{table} 
+	\vspace*{-1cm}  
+	\textbf{\University} 
+	%\vspace*{-0.75 cm} 
+	\begin{table}[H]
+		\begin{tabular}{|p{0.15\textwidth}|p{0.18\textwidth}|p{0.18\textwidth}|p{0.18\textwidth}|p{0.18\textwidth}|}
+			\hline
+			Gruppe: & \multicolumn{4}{|c|}{} 	\\[1em]\hline
+			Name, Vorname: & &    & &			\\[1em]\hline
+			Matr.No.: & &   & 	&	\\[1em]\hline
+		\end{tabular}
+	\end{table}
+	%\hrulefill
+	\begin{center}
+		\small
+		\textbf{Abgabe bis:~\KlausurDatum~in der Poststelle mit Zeitstempel }
+		\normalsize
+	\end{center}
+	\vspace*{-0.5cm}  
+	\hrulefill
+	\vspace*{-1cm}  
+	\tableofcontents\vspace*{-0.5cm} 
+	\hrulefill
+	\vspace*{-0.5cm}  
+	\KlausurPunkte{4}%[3] 
+	\newpage
+	\ifisAufgabenstellung{
+		\TutoriumBearbeitungshinweise
+		\nocite{*}
+		\addcontentsline{toc}{section}{Empfohlene Literatur}
+		\addcontentsline{toc}{section}{Weiterführende Literatur}
+		\bibbycategory\newpage
+	}
+	\ChangePage
+}
+
+
+\newcommand{\TitleTutoriumB}{
+	\changetext{}{-1cm}{0cm}{0cm}{}
+	\setheadwidth[-.5cm]{19.5cm}
+	\setfootwidth[-.5cm]{19.5cm}	 
+	 
+	\minisec{\KlausurName~- (\ref{@KlausurAufgaben}~Aufgaben -~ \ref{@KlausurPunkteGesamt}~Punkte)}
+	%
+	\begin{table}[H]\centering
+		\begin{tabular}{|p{0.4\textwidth}|p{0.4\textwidth}|p{0.2\textwidth}|}\hline
+			\KlausurGetGruppenHeader
+			\textbf{Vorname} & \textbf{Nachname} & \textbf{Matrikelnummer}\\\hline
+			& & \\[1em]\hline
+			& & \\[1em]\hline
+			& & \\[1em]\hline
+			& & \\[1em]\hline
+		\end{tabular}
+	\end{table}
+	\vspace{-1cm}
+	\large
+	\TutoriumBearbeitungshinweise 
+	\vspace{-1.5cm} 
+	\hrulefill~\\%
+	{\tableofcontents} 
+	\vspace{-0.75cm} 
+	\hrulefill\\
+	\vspace{-1.3cm} 
+	\normalsize
+}
+\newcommand{\TutoriumBearbeitungshinweise}{
+	\minisec{Bearbeitungshinweise - Bitte sorgsam lesen!}
+	%\addcontentsline{toc}{section}{Bearbeitungshinweise - Bitte sorgsam lesen!}  
+	\small
+	%\begin{description}
+	\vspace{-0.2cm} 
+	\textbf{Sprache:}
+		Antworten Sie entweder auf Deutsch oder auf Englisch\\
+	\textbf{Hilfsmittel:} 
+		Lineal, Zirkel, Taschenrechner, MS-Office Produkte\\
+	\textbf{Vorgeschlagene Bearbeitungsdauer:} ca. 120 Minuten\\
+	\textbf{Abgabe der Antworten:} 
+		Schreiben Sie Ihren Namen auf alle Angabenblätter.
+		Schreiben Sie Ihre Antworten in die untenstehenden Lücken. 
+		Falls diese nicht ausreichen, nutzen Sie die Rückseiten. 
+		\textbf{Die Abgabe per eMail wird nicht akzeptiert.
+		Bitte denken Sie daran, Kopien dieses Übungsblattes für Ihre 
+		Unterlagen anzufertigen!} \\
+		Zur Lösung dieses Arbeitsblattes können Sie die gängigen Office-Produkte einsetzen! 
+		$\rightarrow$ Nutzen Sie bspw. MS-Excel bei der Durchführung der Berechnungen.  
+		Bitte verwenden Sie das Deckblatt dieses Arbeitsblattes für Ihr 
+		Übungsblatt und heften (Tacker) Sie alle Seiten  zusammen. 
+		\textbf{Bitte keine Büroklammern verwenden}.\\
+	\textbf{Bitte Geben Sie die Aufgaben bis zum~\KlausurDatum~ in der Poststelle ab.}\\\normalsize
+}
+%
+	\newcommandx{\KlausurFinalize}{\label{mylastpage}}
+% 	
+% Wenn das Dokument mit Subversion verwaltet werden soll, 
+% am Anfang eines jeden Teil-Dokuments --> %\svn $$ <-- einfügen
+% außerdem die Attribute 'Date HeadURL Revision Id' für das repository setzen
+% neue Dateien mit Add-Funktion hinzufügen
+% http://www.uweziegenhagen.de/academic/publications/svndtk.pdf
+% http://www.tex.ac.uk/ctan/macros/latex/contrib/svninfo/svninfo.pdf
+%
+%Verfügbare Makros:
+% \svnInfoFile Dateiname,
+% \svnInfoRevision Revisionsnummer,
+% \svnInfoDate Datum des letzten check-in,
+% \svnInfoTime Zeit des letzten check-in,
+% \svnInfoYear Jahr wie in \svnInfoDate,
+% \svnInfoMonth Monat wie in \svnInfoDate,
+% \svnInfoDay Tag wie \svnInfoDate,
+% \svnInfoOwner Besitzer der Datei,
+% \svnToday Datum des letzten Check-in im \today Format,
+% \svnInfoMinRevision minimale Revision des gesamten Dokuments,
+% \svnInfoMaxRevision maximale Revision des gesamten Dokuments
+
+\newcommand{\putSVNinfoTable}{\if@UseSVN
+	\begin{tikzpicture}[remember picture, overlay]
+		\node [shift={(0cm,1.4cm)}]  at (current page.south)
+			{\small 
+				%        \scriptsize
+				\centering
+				\begin{tabular}{|rl|}
+				\hline  
+				\textbf{Projekt:} & \textbf{\svnInfoFile} \\
+				Owner:    \svnInfoOwner & Revision:   \svnInfoRevision \\
+				Stand: & \svnInfoLongDate~\StrSubstitute{\svnInfoTime}{Z}{~Uhr}
+				%~Koordinierte Weltzeit (-2 h)
+				\\
+				% & & \multicolumn{2}{r|}{Koordinierte Weltzeit (-2 h)  } \\
+			\hline 
+		\end{tabular}};
+	\end{tikzpicture}\fi
+} 
+	
+\newcommand{\putSVNinfo}{\if@UseSVN
+	\begin{tikzpicture}[remember picture, overlay]
+		\node [shift={(3cm,0.3cm)}]  at (current page.south west)
+			{\tiny\svnInfoFile~(Rev. \#\svnInfoRevision~-~\svnInfoLongDate~
+			\StrSubstitute{\svnInfoTime}{Z}{~Uhr %[Koordinierte Weltzeit -2 h]
+			})
+		};
+	\end{tikzpicture}\fi 
+}
+
