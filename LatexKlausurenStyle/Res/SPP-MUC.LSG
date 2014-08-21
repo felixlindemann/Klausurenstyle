@@ -1,0 +1,61 @@
+TPL	03.04.11, 20:41:25
+SPP-MUC
+
+
+Knoten:	30
+Kunden:	30
+Menge:	1	[kg]
+Depot:	FFB  	Fürstenfeldbruc
+
+Beding.:	
+Verf.:	Saving/P
+Fz-Kapaz.:	5000	[kg]
+max. T-Länge:	2000	[km]
+max. T-Dauer:	1439	[Minuten]
+
+Touren:	1
+Länge:	284	[km]
+Zeit:	932	[Minuten]
+
+Touren	Kunden	Menge	Länge	Fahrzeit	Standzeit	Dauer
+1	30	1	284	932	0	932
+Gesamt:	30	1	284	932	0	932
+Min:	30	1	284	932	0	932
+Max:	30	1	284	932	0	932
+Mittel:	30,0	1,0	284,0	932,0	0,0	932,0
+
+
+TOUR:	1
+Nr	Kunde	Name	Knoten	Menge	Entf	Fahrzeit	Standzeit	Dauer
+1			WES  	0	21	45	0	45
+2			04A99	0	10	30	0	30
+3			06A99	0	2	12	0	12
+4			09A99	0	5	30	0	30
+5			10A99	0	1	6	0	6
+6			18A99	0	16	45	0	45
+7			GRA  	0	20	45	0	45
+8			MSC  	0	25	50	0	50
+9			17A99	0	9	30	0	30
+10			03MR 	0	6	30	0	30
+11			MUC  	0	7	30	0	30
+12			04MR 	0	8	30	0	30
+13			21A99	0	10	30	0	30
+14			SAU  	0	7	30	0	30
+15			05A9X	0	6	30	0	30
+16			04A9X	0	1	6	0	6
+17			B11G 	0	12	36	0	36
+18			B11S 	0	7	30	0	30
+19			ICK  	0	4	24	0	24
+20			04A95	0	11	33	0	33
+21			07MR 	0	14	42	0	42
+22			05MR 	0	6	30	0	30
+23			09MR 	0	11	33	0	33
+24			10MR 	0	3	18	0	18
+25			01MR 	0	6	30	0	30
+26			ECH  	0	11	33	0	33
+27			13A99	0	7	30	0	30
+28			DAH  	0	17	45	0	45
+29			78A8 	0	9	30	0	30
+30	1    	Dummy	FFB  	1	10	30	0	30
+31	DEP	Depot	FFB  	0	2	9	0	9
+	Summe:	30		1	284	932	0	932

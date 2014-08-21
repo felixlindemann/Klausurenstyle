@@ -1,0 +1,55 @@
+% \svnInfo $Id: Tutorium3-Dijkstra.tex 3 2011-05-18 11:22:28Z felixlindemann $
+	\NeedsTeXFormat{LaTeX2e}
+	\documentclass{scrartcl}
+	 
+	\usepackage[
+		%%answers, 						%LösungFürStudenten
+		%MusterLoesung,			%Musterlösung
+		isGruppenarbeit,		%Gruppenarbeit
+		GiveLines,					%Raum für Antworten
+		GivePoints,					%Kästen zur Benotung
+		Inhaltsverzeichnis 	%Inhaltsverzeichnis
+	]
+	{Klausur}
+	%	  
+	\setKlausurVersionDatum{\today~\thistime~Uhr}
+	\setKlausurTyp{Tutorium} % just a
+	\setKlausurName{\KlausurTyp~No.3 - Dijkstra}
+	\setKlausurFach{Transportwirtschaft Sommersemester 2011}
+	\setKlausurDatum{18. April 2011 09:30 Uhr}
+	\setKlausurProfessor{Name des Professors}
+	 \Huge
+	\bibliography{bib/literature}
+	\addtocategory{primary}{ Neumann.2004,Kathofer.2008.740,Hillier.2002,Heinrich.2007,Gal.1992.741,Domschke.2007,Domschke.2005} 
+	\addtocategory{secondary}{Arnold.2005,Furmans.2008,MullerMerbach.1992.742,Feige.2008}
+	\begin{document}
+	\sffamily\onehalfspacing
+%Falls kein Subversion verwendet wird, kann diese Zeile ggf. manuelle angepasst werden.
+\svnInfo $Id: Tutorium3-Dijkstra.tex 3 2011-05-18 11:22:28Z felixlindemann $
+	 \TitleTutoriumA
+	%%
+	 	\Aufgabe %1
+					 {Theoretische Fragen}
+					 {Tipp: Zur Bearbeitung der folgenden Aufgaben ist ein Blick in die empfohlene Literatur 
+					 sowie die Vorlesungsunterlagen notwendig!} 
+					 \input{Aufgaben/Aufgabe1/a1a} 
+	 	\newpage\input{Aufgaben/Aufgabe1/a2a} 
+	 	\newpage
+	 	\Aufgabe{Fallstudie}
+					 {\ifisAufgabenstellung{
+					 \minisec{Hintergrundinformationen:} 
+					 Als Logistikdienstleister prüfen Sie für einen Kunden aus Eching (ECH) die Routen
+					 zu seinen Kunden. Benutzen Sie für Ihre Planung die vereinfachte Karte (Abbildung \ref{map.MUC}).
+					 In dieser Karte sind die Kundenstandorte (DAH = Dachau, FFB = Fürstenfeldbruck, GRA = Grafing, ICK = Icking,
+					 MSC = Markt Schwaben, MUC = München, SAU = Sauerlach, WES = Weßling) Rot und Wegpunkte (A-R) Blau markiert worden.
+					 Die Länge einer Strecke ist in [km] in einem Kreis auf der jeweiligen Strecke gegeben.\\
+					 In den Tabellen \ref{tbl.dijkstra.A} und \ref{tbl.dijkstra.B} sind Ihnen die ersten 19 
+					 Iterationen des Dijkstra Tableaus gegeben. 
+					 \input{Aufgaben/Aufgabe1/a3Karte} 
+					 \input{Aufgaben/Aufgabe1/a3Dijkstragegeben}~ 
+					 }~}	
+					\input{Aufgaben/Aufgabe1/a3a} 
+					
+			 \KlausurFinalize
+%					[0] % 0 = Erhöhe Revision - Auskommentiert Revision wird nicht erhöht
+	 \end{document}

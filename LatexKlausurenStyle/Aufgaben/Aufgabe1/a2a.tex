@@ -1,0 +1,48 @@
+% \svnInfo $Id: a2a.tex 2 2011-05-18 10:04:02Z felixlindemann $
+\Aufgabe %1
+				 {Korrektur Fragen}
+				 {\ifisAufgabenstellung{Im Folgenden erhalten Sie den Kürzeste-Wege-Lösungsvorschlag 
+				 (Tabelle \ref{tbl.SolutionStudent}) eines Kommilitonen für nachstehenden Graphen.
+				 \input{grafik/netzdijkstra}
+				 \input{Aufgaben/Aufgabe1/a2TableStud}}	~			 
+				 }
+\TeilAufgabe{Stellen Sie fest, ob Ihr Kommilitone richtig gerechnet hat. Berechnen Sie dazu 
+				 eine eigene Lösung.
+				 \ifisAufgabenstellung{ Nutzen Sie für Ihre Lösung Tabelle \ref{tbl.SolutionYou}!}}
+				 {15}
+				 \ifisAufgabenstellung{
+\input{Aufgaben/Aufgabe1/a2TableYour}	}	
+\KlausurErgebnis{\input{Aufgaben/Aufgabe1/a2TableML}		}
+\KlausurMusterLoesung{\input{Aufgaben/Aufgabe1/a2TableML} } 
+\KlausurKorrekturhinweis{je Korrekter Iteration jeweils 
+1p für korrektes $Q$, 
+1p für korrekte Entfernungen
+Max. 14p.} 
+\KlausurErlaeuterung{-}
+\TeilAufgabe{Erklären Sie Ihrem Kommilitonen die gemachten Fehler.}
+				 {3}
+\KlausurAntwortLinien{4}
+\KlausurErgebnis{\begin{enumerate}
+	\item $Q$ wurde pauschal nicht angegeben
+	\item $\infty$ in Iteration 2 muss eine 8 sein
+	\item Die Strecke von $v_2$ nach $v_5$ die in Iteration 3 verwendet wurde 
+				existiert nur in der Gegenrichtung.
+\end{enumerate}}
+\KlausurMusterLoesung{\begin{enumerate}
+	\item $Q$ wurde pauschal nicht angegeben
+	\item Die Strecke von $v_2$ nach $v_5$ die in Iteration 3 verwendet wurde 
+				existiert nur in der Gegenrichtung.
+\end{enumerate} } 
+\KlausurKorrekturhinweis{jeweils 1p Max 2} 
+\KlausurErlaeuterung{-}
+\TeilAufgabe{Erklären Sie Ihrem Kommilitonen wie aus Ihrem Dijkstra Tableau 
+					 \ifisAufgabenstellung{(Tabelle \ref{tbl.SolutionYou})}
+						der kürzeste Weg sowie die Länge von Knoten $v_1$ zu Knoten $v_5$ abgelesen werden kann. 
+						Geben Sie dabei auch den Weg, sowie die Gesamtlänge an!}
+				 {5}
+\KlausurAntwortLinien{4}
+\KlausurErgebnis{Rekursiv - Siehe Tutorium}
+\KlausurMusterLoesung{Rekursiv(1p): Der Weg vom Startknoten zu Knoten $v_5$ beträgt 11 Einheiten(1p) (Zeile 5 Iteration 7 Spalte d). Der Vorgänger von Knoten $v_5$ ist $v_4$(Zeile 5 Iteration 7 Spalte p). Der Vorgänger von Knoten $v_4$ ist $v_2$ und der Vorgänger von $v_2$ ist $v_1$.(2p) 
+Daraus folgt das der Weg vom Startknoten zum Knoten $v_5$ lautet: $v_1\rightarrow v_2\rightarrow v_4\rightarrow  v_5$(1p)  } 
+\KlausurKorrekturhinweis{Siehe Musterlösung.} 
+\KlausurErlaeuterung{-}

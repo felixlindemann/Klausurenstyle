@@ -1,0 +1,53 @@
+% \svnInfo $Id: a1a.tex 2 2011-05-18 10:04:02Z felixlindemann $
+
+\TeilAufgabe
+				 {Auf \url{http://de.wikipedia.org/wiki/Dijkstra-Algorithmus} heißt es:\\
+"`\emph{Der Algorithmus von Dijkstra [\ldots] ist ein Algorithmus aus der Klasse der Greedy-Algorithmen 
+und dient der Berechnung eines kürzesten Pfades zwischen einem Startknoten 
+und einem beliebigen Knoten in einem kantengewichteten Graphen.}"'\\
+Diskutieren Sie, ob der Algorithmus von Dijkstra tatsächlich zur Familie der Greedy-Heuristiken gehört.\\
+Hinweis: Definieren Sie dazu zunächst den Begriff der Greedy Heuristik.}
+				 {6}
+\KlausurAntwortLinien{6}
+\KlausurErgebnis{Richtig, Erläuterungen siehe Tutorium}
+\KlausurMusterLoesung{Richtig/ja(1p), eine Greedyheuristik wählt \emph{gierig} die lokal beste Lösung aus(1p), ohne dabei auf das Gesamtoptimum zu achten.(1p)
+Der Alg. von Dijkstra wählt auch das lokale Optimum aus.(1p) Da ein gesamt-kürzester Weg immer aus Teil-kürzesten Wegen besteht,(1p)
+kann der Alg. von Dijkstra als Sonderfall interpretiert werden.(1p)} 
+\KlausurKorrekturhinweis{je Aspekt 1p, Großzügig bewerten } 
+\KlausurErlaeuterung{-}
+%
+\TeilAufgabe
+				 {Gehen Sie davon aus, dass in einem beliebigen symmetrischen Netzwerk 5 Knoten ($A-E$) existieren.\\
+Diskutieren Sie, ob der kürzeste Weg von $A$ nach $E$ im Netz identisch mit dem Weg von $E$ nach $A$ ist, 
+wenn beide Wege mit dem \emph{Algorithmus von Dijkstra} berechnet werden.\\
+Illustrieren Sie Ihre Ausführungen mit einer Skizze.}
+				 {4}
+\KlausurAntwortLinien{4}
+\KlausurAntwortKasten{4cm}
+\KlausurErgebnis{Ja, beide Wege sind gleich-lang, Erläuterungen siehe Tutorium}
+\KlausurMusterLoesung{Ja, beide Wege sind gleich-lang.(1p) Im Falle eines asymmetrischen (1P) Netzwerks kann sich eine andere Route (1p) ergeben.} 
+\KlausurKorrekturhinweis{Für korrekte Antwort 3P, 1p Skizze} 
+\KlausurErlaeuterung{-}
+%%
+%\ 
+\ifisAufgabenstellung{\newpage}
+\TeilAufgabe
+				 {Was ist die Bedeutung von $Q$ im Dijkstra-Tableau? }
+				 {2}
+\KlausurAntwortLinien{6}
+\KlausurErgebnis{Richtig, Erläuterungen siehe Tutorium}
+\KlausurMusterLoesung{Die Menge $Q$ ist eine sortierte Liste der erreichbaren Knoten (1p).
+ Die Knoten sind aufsteigend sortiert anzugeben (1p). \\Alternativ: Das Element mit niedrigstem Kostenwert steht vorne.(1p)   }
+\KlausurKorrekturhinweis{je Aspekt 1p} 
+\KlausurErlaeuterung{-}
+% 
+\TeilAufgabe
+				 {Wieviele Knoten werden beim Dijkstra-Algorithmus bei der Ermittlung von kürzesten Wegen
+				 je Iteration ausgewählt?}
+				 {1}
+\KlausurAntwortLinien{2}
+\KlausurErgebnis{genau 1 Knoten}
+\KlausurMusterLoesung{genau 1 Knoten(1p)  } 
+\KlausurKorrekturhinweis{1p} 
+\KlausurErlaeuterung{-}
+% 

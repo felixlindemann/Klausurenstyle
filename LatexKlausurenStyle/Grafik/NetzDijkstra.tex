@@ -1,0 +1,27 @@
+% \svnInfo $Id: NetzDijkstra.tex 2 2011-05-18 10:04:02Z felixlindemann $
+\begin{figure}[H]\centering
+  \begin{tikzpicture}[ shorten >=1pt, node distance=2.5cm,
+      semithick,scale=0.75 ]
+      \tikzstyle{every state}=[fill=white,draw,circle,inner sep=1pt]      
+      \node[initial, state](A)                          {$v_1$};
+      \node[state]         (B) [below right of=A]       {$v_2$};
+      \node[state]         (C) [above right of=A]       {$v_3$};
+      \node[state]         (D) [right of=B]             {$v_4$};
+      \node[state]         (E) [right of=C]             {$v_5$};
+      \node[state]         (F) [above right of=D]       {$v_6$};      
+      \tikzstyle{tikzNodeLength}=[fill=white,draw,circle,inner sep=1pt,font=\sf \tiny]      
+      \begin{scope}[>=latex]
+            \path[->] (A) edge               node[tikzNodeLength]  {4}  (B);
+            \path[<->] (A) edge               node[tikzNodeLength]  {8}  (C);
+            \path[<->] (B) edge [bend left]    node[tikzNodeLength]  {3} (C);
+            \path[<-] (B) edge [bend right] node[tikzNodeLength]  {2} (E);
+            \path[->] (C) edge [bend right] node[tikzNodeLength]  {3} (D);
+            \path[->] (C) edge [bend right] node[tikzNodeLength]  {7} (E);
+            \path[<->] (D) edge              node[tikzNodeLength]  {4} (F);
+            \path[<->] (D) edge              node[tikzNodeLength]  {4} (B);
+            \path[->] (E) edge [bend right]  node[tikzNodeLength]  {1} (C);
+            \path[<->] (E) edge  [bend left]   node[tikzNodeLength]  {3} (D);
+            \path[<->] (E) edge              node[tikzNodeLength]  {7} (F);
+      \end{scope}
+  \end{tikzpicture} 
+\end{figure}
